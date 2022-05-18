@@ -517,6 +517,29 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 
 		//if reflective object
 		if (hitObj->GetMaterial()->GetTransmittance() > 0 && depth < maxDepth) {
+			//offset intersections at the secondary rays
+			Vector newOrg = pHit + (nHit * EPSILON);
+			Vector newOrg2 = pHit - (nHit * EPSILON);
+
+			//calculate ray in the reflected direction
+			Vector reflectionDir = ray.direction - nHit * 2 * (ray.direction * nHit);
+			Ray rRay = Ray(newOrg, reflectionDir);
+
+			Color rColor = rayTracing(rRay, depth + 1, ior_1);
+
+			float fresneleffect;
+			float facingratio = ray.direction * nHit * -1;
+
+			fresneleffect = schlick(ray.direction, nHit, ior_1, hitObj->GetMaterial()->GetRefrIndex());
+			float eta = (inside) ? hitObj->GetMaterial()->GetRefrIndex() : 1 / hitObj->GetMaterial()->GetRefrIndex(); // are we inside or outside the surface?
+			float cosi = nHit * ray.direction * -1;
+			float k = 1 - eta * eta * (1 - cosi * cosi);
+			Vector refractionDir = ray.direction * eta + nHit * (eta * cosi - sqrt(k));
+			refractionDir = refractionDir.normalize();
+			Ray tRay = Ray(newOrg2, refractionDir);
+			Color tColor = rayTracing(tRay, depth + 1, ior_1);
+			//reduce rColor by the specular reflection coefficient and add to color???
+			pixel_color += (rColor * fresneleffect * hitObj->GetMaterial()->GetSpecColor()) + (tColor * (1 - fresneleffect));
 
 		}else if (hitObj->GetMaterial()->GetReflection() > 0 && depth < maxDepth) {
 			//offset intersections at the secondary rays
@@ -529,95 +552,39 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 
 			Color rColor = rayTracing(rRay, depth + 1, ior_1) ;
 
-			float fresneleffect;
-			float facingratio = ray.direction * nHit * -1;
-
-			/*
-			float refrObj = hitObj->GetMaterial()->GetRefrIndex();
-			//printf("refrObj %f\n", refrObj);
-			float snell = ior_1 / refrObj; // sen i / sen t
-			float cos1 = sqrt(1 - refrObj*refrObj);
-			
-			float cos2 = sqrt(1 - ior_1 * ior_1);
-			float Rperp = (refrObj * cos1 - ior_1 * cos2) / (refrObj * cos1 + ior_1 * cos2);
-			Rperp *= Rperp;
-			
-			float Rparal = (refrObj * cos2 - ior_1 * cos1) / (refrObj * cos2 + ior_1 * cos1);
-			Rparal *= Rparal;
-			*/
-			//printf("Rparal %f\n", Rparal);
-			/*float cosi = ray.direction * nHit * -1;
-			float etai = ior_1, etat = hitObj->GetMaterial()->GetRefrIndex();
-			if (cosi > 0) { std::swap(etai, etat); }
-			// Compute sini using Snell's law
-			float sint = etai / etat * sqrtf(std::max(0.f, 1 - cosi * cosi));
-			// Total internal reflection
-			if (sint >= 1) {
-				fresneleffect = 1;
-			}
-			else {
-				float cost = sqrtf(std::max(0.f, 1 - sint * sint));
-				cosi = fabsf(cosi);
-				float Rs = ((etat * cosi) - (etai * cost)) / ((etat * cosi) + (etai * cost));
-				float Rp = ((etai * cosi) - (etat * cost)) / ((etai * cosi) + (etat * cost));
-				fresneleffect = (Rs * Rs + Rp * Rp) / 2;
-			}*/
-
-			//fresneleffect = schlick(ray.direction, nHit, ior_1, hitObj->GetMaterial()->GetRefrIndex());
-
-
-
-			fresneleffect = mix(pow(1 - facingratio, 3), 1, 0.1);
-
-			Color tColor;
-			if (hitObj->GetMaterial()->GetTransmittance()) {
-				printf("aqui\n");
-				float eta = (inside) ? ior_1 : 1 / ior_1; // are we inside or outside the surface?
-				float cosi = nHit * ray.direction * -1;
-				float k = 1 - eta * eta * (1 - cosi * cosi);
-				Vector refractionDir = ray.direction * eta + nHit * (eta * cosi - sqrt(k));
-				refractionDir = refractionDir.normalize();
-				Ray tRay = Ray(newOrg2, refractionDir);
-				Color tColor = rayTracing(tRay, depth + 1, ior_1);
-			}
-
-			//reduce rColor by the specular reflection coefficient and add to color???
 			pixel_color += (rColor * hitObj->GetMaterial()->GetSpecular()*hitObj->GetMaterial()->GetSpecColor());
 		}
 		
-			for (int l = 0; l < numLights; l++) {
-				bool isShadow = false;
-				Light* luz = scene->getLight(l);
-				Vector L = (luz->position - pHit).normalize();
+		for (int l = 0; l < numLights; l++) {
+			bool isShadow = false;
+			Light* luz = scene->getLight(l);
+			Vector L = (luz->position - pHit).normalize();
 
-				Vector shadowpHit = pHit + nHit * EPSILON;
-				float shadowRayDist = INFINITY;
-				Ray shadowRay = Ray(shadowpHit, L);
-
-
-				//if  (!point in shadow); trace shadow ray
-				for (int i = 0; i < numObjects; i++) {
-					Object* obj = scene->getObject(i);
-
-					if (obj->intercepts(shadowRay, shadowRayDist)) {
-						isShadow = true;
-						break;
-					}
-				}
-
-				if (float intensity = L * nHit > 0) {
-					if (!isShadow) {
-						Vector H = ((L - ray.direction)/2).normalize();
-
-						Color diff = luz->color * hitObj->GetMaterial()->GetDiffColor() * hitObj->GetMaterial()->GetDiffuse() * max(0.0f, nHit * L);
-						Color spec = luz->color * hitObj->GetMaterial()->GetSpecColor() * hitObj->GetMaterial()->GetSpecular() * pow(max(0.0f, H * nHit), hitObj->GetMaterial()->GetShine());
-
-						pixel_color += (diff + spec);
-						//pixel_color = pixel_color.clamp();
-
-					}
+			Vector shadowpHit = pHit + nHit * EPSILON;
+			float shadowRayDist = INFINITY;
+			Ray shadowRay = Ray(shadowpHit, L);
+			//if  (!point in shadow); trace shadow ray
+			for (int i = 0; i < numObjects; i++) {
+				Object* obj = scene->getObject(i);
+				if (obj->intercepts(shadowRay, shadowRayDist)) {
+					isShadow = true;
+					break;
 				}
 			}
+
+			if (float intensity = L * nHit > 0) {
+				if (!isShadow) {
+					Vector H = ((L - ray.direction)/2).normalize();
+
+					Color diff = luz->color * hitObj->GetMaterial()->GetDiffColor() * hitObj->GetMaterial()->GetDiffuse() * max(0.0f, nHit * L);
+					Color spec = luz->color * hitObj->GetMaterial()->GetSpecColor() * hitObj->GetMaterial()->GetSpecular() * pow(max(0.0f, H * nHit), hitObj->GetMaterial()->GetShine());
+
+					pixel_color += (diff + spec);
+					//pixel_color = pixel_color.clamp();
+
+				}
+			}
+		}
 		
 
 		return pixel_color;
