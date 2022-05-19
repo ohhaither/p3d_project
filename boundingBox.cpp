@@ -112,14 +112,48 @@ bool AABB::intercepts(const Ray& ray, float& t)
 		tz_max = (z0 - oz) * c;
 	}
 
-	//largest entering t value
-	t0 = MAX3(tx_min, ty_min, tz_min);
+	float tE, tL; //entering and leaving t values Vector face_in, face_out; // normals
+	Vector face_in, face_out, Normal;
 
-	//smallest exiting t value
-	t1 = MIN3(tx_max, ty_max, tz_max);
 
-	t = (t0 < 0) ? t1 : t0;
+	// find largest tE, entering t value
+	if (tx_min > ty_min) {
+		tE = tx_min;
+		face_in = (a >= 0.0) ? Vector(-1, 0, 0) : Vector(1, 0, 0);
+	} else {
+		tE = ty_min;
+		face_in = (b >= 0.0) ? Vector(0, -1, 0) : Vector(0, 1, 0);
+	}
 
-	return (t0 < t1 && t1 > 0);
+	if (tz_min > tE) {
+		tE = tz_min;
+		face_in = (c >= 0.0) ? Vector(0, 0, -1) : Vector(0, 0, 1);
+	}
+
+	// find smallest tL, leaving t value
+	if (tx_max < ty_max) {
+		tL = tx_max;
+		face_out = (a >= 0.0) ? Vector(1, 0, 0) : Vector(-1, 0, 0);
+	} else {
+		tL = ty_max;
+		face_out = (b >= 0.0) ? Vector(0, 1, 0) : Vector(0, -1, 0);
+	}
+
+	if (tz_max < tL) {
+		tL = tz_max;
+		face_out = (c >= 0.0) ? Vector(0, 0, 1) : Vector(0, 0, -1);
+	}
+
+	if (tE < tL && tL > 0) { // condition for a hit
+		if (tE > 0) {
+			t = tE; // ray hits outside surface
+			Normal = face_in;
+		} else {
+			t = tL; // ray hits inside surface
+			Normal = face_out;
+		}
+		return (true);
+	}
+	else return (false);
 }
 #endif

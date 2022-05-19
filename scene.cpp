@@ -175,7 +175,7 @@ Vector Sphere::getNormal( Vector point )
 
 AABB Sphere::GetBoundingBox() {
 	Vector a_min;
-	Vector a_max ;
+	Vector a_max;
 
 	//PUT HERE YOUR CODE
 	return(AABB(a_min, a_max));
@@ -193,8 +193,101 @@ AABB aaBox::GetBoundingBox() {
 
 bool aaBox::intercepts(Ray& ray, float& t)
 {
-	//PUT HERE YOUR CODE
-		return (false);
+	double t0, t1;
+
+	float ox = ray.origin.x;
+	float oy = ray.origin.y;
+	float oz = ray.origin.z;
+	float dx = ray.direction.x;
+	float dy = ray.direction.y;
+	float dz = ray.direction.z;
+
+	float x0 = min.x;
+	float y0 = min.y;
+	float z0 = min.z;
+	float x1 = max.x;
+	float y1 = max.y;
+	float z1 = max.z;
+
+	float tx_min, ty_min, tz_min;
+	float tx_max, ty_max, tz_max;
+
+	float a = 1.0 / dx;
+	if (a >= 0) {
+		tx_min = (x0 - ox) * a;
+		tx_max = (x1 - ox) * a;
+	}
+	else {
+		tx_min = (x1 - ox) * a;
+		tx_max = (x0 - ox) * a;
+	}
+
+	float b = 1.0 / dy;
+	if (b >= 0) {
+		ty_min = (y0 - oy) * b;
+		ty_max = (y1 - oy) * b;
+	}
+	else {
+		ty_min = (y1 - oy) * b;
+		ty_max = (y0 - oy) * b;
+	}
+
+	float c = 1.0 / dz;
+	if (c >= 0) {
+		tz_min = (z0 - oz) * c;
+		tz_max = (z1 - oz) * c;
+	}
+	else {
+		tz_min = (z1 - oz) * c;
+		tz_max = (z0 - oz) * c;
+	}
+
+	float tE, tL; //entering and leaving t values Vector face_in, face_out; // normals
+	Vector face_in, face_out, Normal;
+
+
+	// find largest tE, entering t value
+	if (tx_min > ty_min) {
+		tE = tx_min;
+		face_in = (a >= 0.0) ? Vector(-1, 0, 0) : Vector(1, 0, 0);
+	}
+	else {
+		tE = ty_min;
+		face_in = (b >= 0.0) ? Vector(0, -1, 0) : Vector(0, 1, 0);
+	}
+
+	if (tz_min > tE) {
+		tE = tz_min;
+		face_in = (c >= 0.0) ? Vector(0, 0, -1) : Vector(0, 0, 1);
+	}
+
+	// find smallest tL, leaving t value
+	if (tx_max < ty_max) {
+		tL = tx_max;
+		face_out = (a >= 0.0) ? Vector(1, 0, 0) : Vector(-1, 0, 0);
+	}
+	else {
+		tL = ty_max;
+		face_out = (b >= 0.0) ? Vector(0, 1, 0) : Vector(0, -1, 0);
+	}
+
+	if (tz_max < tL) {
+		tL = tz_max;
+		face_out = (c >= 0.0) ? Vector(0, 0, 1) : Vector(0, 0, -1);
+	}
+
+	if (tE < tL && tL > 0) { // condition for a hit
+		if (tE > 0) {
+			t = tE; // ray hits outside surface
+			Normal = face_in;
+		}
+		else {
+			t = tL; // ray hits inside surface
+			Normal = face_out;
+		}
+		return (true);
+	}
+	else return (false);
 }
 
 Vector aaBox::getNormal(Vector point)
