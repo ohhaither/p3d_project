@@ -593,10 +593,6 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 
 
 
-
-
-
-
 // Render function by primary ray casting from the eye towards the scene's objects
 
 void renderScene()
@@ -604,6 +600,7 @@ void renderScene()
 	int index_pos = 0;
 	int index_col = 0;
 	unsigned int counter = 0;
+	float nSample = 3;
 
 	if (drawModeEnabled) {
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -617,13 +614,24 @@ void renderScene()
 			Color color;
 
 			Vector pixel;  //viewport coordinates
-			pixel.x = x + 0.5f;
-			pixel.y = y + 0.5f;
 
+			color = Color(0, 0, 0);
 			
-			Ray ray = scene->GetCamera()->PrimaryRay(pixel);   //function from camera.h
+			for (int p = 0; p < nSample; p++) 
+				for (int q = 0; q < nSample; q++) {
+					float rndVal = rand_float();
 
-			color = rayTracing(ray, 1, 1.0).clamp();
+					pixel.x = x + (p + rndVal) / nSample;
+					pixel.y = y + (q + rndVal) / nSample;
+
+					Ray ray = scene->GetCamera()->PrimaryRay(pixel);   //function from camera.h
+
+					color += rayTracing(ray, 1, 1.0);
+				}
+
+			color = color * (1 / (nSample * nSample));
+					
+				
 			
 
 			//color = scene->GetBackgroundColor(); //TO CHANGE - just for the template
