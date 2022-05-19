@@ -558,7 +558,60 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 		for (int l = 0; l < numLights; l++) {
 			bool isShadow = false;
 			Light* luz = scene->getLight(l);
-			Vector L = (luz->position - pHit).normalize();
+
+			//without anti aliasing
+			Vector lightArray[9];
+			lightArray[0] = luz->position;
+			lightArray[1] = Vector(luz->position.x + 0.05, luz->position.y, luz->position.z);
+			lightArray[2] = Vector(luz->position.x - 0.05, luz->position.y, luz->position.z);
+
+			lightArray[3] = Vector(luz->position.x, luz->position.y - 0.05, luz->position.z);
+			lightArray[4] = Vector(luz->position.x + 0.05, luz->position.y - 0.05, luz->position.z);
+			lightArray[5] = Vector(luz->position.x - 0.05, luz->position.y - 0.05, luz->position.z);
+
+			lightArray[6] = Vector(luz->position.x, luz->position.y + 0.04, luz->position.z);
+			lightArray[7] = Vector(luz->position.x + 0.05, luz->position.y + 0.05, luz->position.z);
+			lightArray[8] = Vector(luz->position.x - 0.05, luz->position.y + 0.05, luz->position.z);
+			// 
+			//with anti aliasing
+			Vector up = (luz->position + Vector(2, 0, 0)).normalize();
+			Vector right = (luz->position + Vector(0, 2, 0)).normalize();
+			float rndVal1 = rand_float();
+			float rndVal2 = rand_float();
+			Vector randomPlace = luz->position + up * rndVal1 + right * rndVal2;
+			/*
+			for (int k = 0; k < 9; k++) {
+				Vector L = (lightArray[k] - pHit).normalize();
+				//
+
+				Vector shadowpHit = pHit + nHit * EPSILON;
+				float shadowRayDist = INFINITY;
+				Ray shadowRay = Ray(shadowpHit, L);
+				//if  (!point in shadow); trace shadow ray
+				for (int i = 0; i < numObjects; i++) {
+					Object* obj = scene->getObject(i);
+					if (obj->intercepts(shadowRay, shadowRayDist)) {
+						isShadow = true;
+						break;
+					}
+				}
+
+				if (float intensity = (L * nHit)/9.0 > 0) {
+					if (!isShadow) {
+						Vector H = ((L - ray.direction) / 2).normalize();
+
+						Color diff = luz->color * hitObj->GetMaterial()->GetDiffColor() * hitObj->GetMaterial()->GetDiffuse() * max(0.0f, nHit * L);
+						Color spec = luz->color * hitObj->GetMaterial()->GetSpecColor() * hitObj->GetMaterial()->GetSpecular() * pow(max(0.0f, H * nHit), hitObj->GetMaterial()->GetShine());
+
+						pixel_color += (diff + spec)*(1.0/9.0);
+						//pixel_color = pixel_color.clamp();
+
+					}
+				}
+			}
+			*/
+			Vector L = (randomPlace - pHit).normalize();
+			//
 
 			Vector shadowpHit = pHit + nHit * EPSILON;
 			float shadowRayDist = INFINITY;
@@ -572,9 +625,9 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 				}
 			}
 
-			if (float intensity = L * nHit > 0) {
+			if (float intensity = (L * nHit) > 0) {
 				if (!isShadow) {
-					Vector H = ((L - ray.direction)/2).normalize();
+					Vector H = ((L - ray.direction) / 2).normalize();
 
 					Color diff = luz->color * hitObj->GetMaterial()->GetDiffColor() * hitObj->GetMaterial()->GetDiffuse() * max(0.0f, nHit * L);
 					Color spec = luz->color * hitObj->GetMaterial()->GetSpecColor() * hitObj->GetMaterial()->GetSpecular() * pow(max(0.0f, H * nHit), hitObj->GetMaterial()->GetShine());
@@ -584,6 +637,7 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 
 				}
 			}
+
 		}
 		
 
@@ -600,7 +654,7 @@ void renderScene()
 	int index_pos = 0;
 	int index_col = 0;
 	unsigned int counter = 0;
-	float nSample = 3;
+	float nSample = 4;
 
 	if (drawModeEnabled) {
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -630,8 +684,13 @@ void renderScene()
 				}
 
 			color = color * (1 / (nSample * nSample));
-					
-				
+			
+			/*
+			pixel.x = x + 0.5f;
+			pixel.y = y + 0.5f;
+			Ray ray = scene->GetCamera()->PrimaryRay(pixel);
+			color = rayTracing(ray, 1, 1.0).clamp();
+			*/
 			
 
 			//color = scene->GetBackgroundColor(); //TO CHANGE - just for the template
