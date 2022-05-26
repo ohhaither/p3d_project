@@ -1,20 +1,113 @@
-﻿  main.cpp
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\maths.h(69,23): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\color.h(42,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\color.h(41,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\color.h(40,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(479,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(565,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(566,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(568,60): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(569,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(569,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(570,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(570,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(572,60): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(573,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(573,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(574,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(574,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  P3D_Template3.vcxproj -> C:\Users\tomax\source\repos\P3D_Template3\x64\Debug\P3D_Template3.exe
+﻿  bvh.cpp
+C:\Users\tomax\Desktop\p3d\p3d_project\maths.h(69,23): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(42,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(41,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(40,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\bvh.cpp(25,49): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\bvh.cpp(45,43): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\bvh.cpp(60,10): warning C4101: 'tmp': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\bvh.cpp(72,10): warning C4101: 'tmp': unreferenced local variable
+  grid.cpp
+C:\Users\tomax\Desktop\p3d\p3d_project\maths.h(69,23): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(42,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(41,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(40,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(9,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(63,18): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(64,18): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(65,18): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(80,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(81,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(82,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(83,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(84,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(85,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(32,6): warning C4101: 'xmin': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(33,12): warning C4101: 'ymax': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(34,12): warning C4101: 'zmax': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(35,6): warning C4101: 'index': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(33,6): warning C4101: 'ymin': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(32,12): warning C4101: 'xmax': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(34,6): warning C4101: 'zmin': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(124,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(134,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(144,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(177,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(178,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(179,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(183,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(184,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\grid.cpp(185,13): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  main.cpp
+C:\Users\tomax\Desktop\p3d\p3d_project\maths.h(69,23): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(42,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(41,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(40,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(479,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(565,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(566,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(568,60): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(569,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(569,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(570,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(570,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(572,60): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(573,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(573,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(574,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(574,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(657,16): warning C4244: 'initializing': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(681,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\main.cpp(681,24): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  scene.cpp
+C:\Users\tomax\Desktop\p3d\p3d_project\maths.h(69,23): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(42,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(41,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\color.h(40,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(13,8): warning C4101: 'l': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(125,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(128,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(215,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(225,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(235,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(196,9): warning C4101: 't0': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(196,13): warning C4101: 't1': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(313,23): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(333,22): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(461,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(462,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(401,8): warning C4101: 't_intersec': unreferenced local variable
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(527,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(527,53): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(527,46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(527,42): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(527,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(581,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(585,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(658,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(699,40): warning C4244: 'argument': conversion from 'time_t' to 'const int', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(703,46): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(709,59): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(709,145): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(728,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(728,80): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(728,29): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(730,7): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(732,77): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(732,62): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(732,47): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(733,38): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(738,116): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(738,95): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(738,74): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(739,38): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(744,95): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(745,38): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(754,91): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(759,45): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(759,91): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(764,45): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\tomax\Desktop\p3d\p3d_project\scene.cpp(764,72): warning C4305: 'argument': truncation from 'double' to 'float'
+  Generating Code...
+  P3D_Template3.vcxproj -> C:\Users\tomax\Desktop\p3d\p3d_project\x64\Debug\P3D_Template3.exe
   0 File(s) copied

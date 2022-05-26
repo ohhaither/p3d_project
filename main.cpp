@@ -654,7 +654,7 @@ void renderScene()
 	int index_pos = 0;
 	int index_col = 0;
 	unsigned int counter = 0;
-	float nSample = 4;
+	float nSample = scene->GetSamplesPerPixel();
 
 	if (drawModeEnabled) {
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -670,7 +670,32 @@ void renderScene()
 			Vector pixel;  //viewport coordinates
 
 			color = Color(0, 0, 0);
+
+			//DOF START
+			Camera* camera = scene->GetCamera();
+			//float focalDist = 1.5f;
+			float viewDist = camera->GetPlaneDist();
+
+			for (int p = 0; p < nSample; p++) {
+				Vector ls = rnd_unit_disk() * camera->GetAperture();
+				Vector ps = Vector(x, y, -viewDist);
+				/*Vector ls = rnd_unit_disk() * camera->GetAperture();
+				Vector ps = Vector(x, y, -viewDist);
+				float px = ps.x * (focalDist / viewDist);
+				float py = ps.y * (focalDist / viewDist);
+
+				Vector rayDir = Vector( (px - ls.x ),  (py - ls.y), - focalDist).normalize();
+				Vector eye_offset = camera->GetEye() +  Vector(ls.x , ls.y, 0.0f);
+
+				Ray ray = scene->GetCamera()->PrimaryRay(eye_offset, rayDir);*/
+				Ray ray = scene->GetCamera()->PrimaryRay(ls, ps);
+				color += rayTracing(ray, 1, 1.0).clamp();
+
+			}
+			color = color * (1.0f / nSample);
+			//DOF END
 			
+			/* ANTI ALIASING
 			for (int p = 0; p < nSample; p++) 
 				for (int q = 0; q < nSample; q++) {
 					float rndVal = rand_float();
@@ -684,8 +709,9 @@ void renderScene()
 				}
 
 			color = color * (1 / (nSample * nSample));
-			
-			/*
+			*/
+
+			/* NORMAL
 			pixel.x = x + 0.5f;
 			pixel.y = y + 0.5f;
 			Ray ray = scene->GetCamera()->PrimaryRay(pixel);
