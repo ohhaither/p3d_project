@@ -676,40 +676,36 @@ void renderScene()
 			//float focalDist = 1.5f;
 			float viewDist = camera->GetPlaneDist();
 
-			for (int p = 0; p < nSample; p++) {
+			if (!nSample) nSample = 2;
+
+			/*for (int p = 0; p < nSample; p++) {
 				Vector ls = rnd_unit_disk() * camera->GetAperture();
 				Vector ps = Vector(x, y, -viewDist);
-				/*Vector ls = rnd_unit_disk() * camera->GetAperture();
-				Vector ps = Vector(x, y, -viewDist);
-				float px = ps.x * (focalDist / viewDist);
-				float py = ps.y * (focalDist / viewDist);
-
-				Vector rayDir = Vector( (px - ls.x ),  (py - ls.y), - focalDist).normalize();
-				Vector eye_offset = camera->GetEye() +  Vector(ls.x , ls.y, 0.0f);
-
-				Ray ray = scene->GetCamera()->PrimaryRay(eye_offset, rayDir);*/
+	
 				Ray ray = scene->GetCamera()->PrimaryRay(ls, ps);
 				color += rayTracing(ray, 1, 1.0).clamp();
 
 			}
-			color = color * (1.0f / nSample);
-			//DOF END
+			color = color * (1.0f / nSample);*/
 			
-			/* ANTI ALIASING
+
 			for (int p = 0; p < nSample; p++) 
 				for (int q = 0; q < nSample; q++) {
+					Vector ls = rnd_unit_disk() * camera->GetAperture();
+
+
 					float rndVal = rand_float();
 
 					pixel.x = x + (p + rndVal) / nSample;
 					pixel.y = y + (q + rndVal) / nSample;
+					pixel.z = -viewDist;
 
-					Ray ray = scene->GetCamera()->PrimaryRay(pixel);   //function from camera.h
+					Ray ray = scene->GetCamera()->PrimaryRay(ls, pixel);   //function from camera.h
 
 					color += rayTracing(ray, 1, 1.0);
 				}
 
 			color = color * (1 / (nSample * nSample));
-			*/
 
 			/* NORMAL
 			pixel.x = x + 0.5f;

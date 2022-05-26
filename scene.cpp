@@ -17,6 +17,11 @@ Triangle::Triangle(Vector& P0, Vector& P1, Vector& P2)
 	normal = normal.normalize();
 
 	//YOUR CODE to Calculate the Min and Max for bounding box
+	float aux_min, aux_max;
+	
+	aux_min = min(points[0].x, points[1].x);
+	aux_min = min(aux_min, points[2].x);
+
 	Min = Vector(+FLT_MAX, +FLT_MAX, +FLT_MAX);
 	Max = Vector(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
