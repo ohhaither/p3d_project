@@ -475,30 +475,45 @@ float schlick(Vector dir, Vector n, float ior1, float ior2) {
 
 Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medium 1 where the ray is travelling
 {
+
+	
+
 	int maxDepth = 3;
 	Vector I = ray.direction.operator*((-1, -1, -1));
 	float minDist = INFINITY;
 	Object* hitObj = NULL;
 	float dist;
-
-	//test if ray hits an object and store the closest hit point to start of ray
+	Vector pHit;
 	int numObjects = scene->getNumObjects();
-	for (int i = 0; i < numObjects; i++) {
-		
-		if (scene->getObject(i)->intercepts(ray, dist)) {
-			if (dist < minDist) {
-				hitObj = scene->getObject(i);
-				minDist = dist; // update min distance 
+
+
+
+	if (Accel_Struct == GRID_ACC) {
+		grid_ptr->Traverse(ray,&hitObj,pHit);
+	}
+	if (Accel_Struct == NONE) {
+		for (int i = 0; i < numObjects; i++) {
+			if (scene->getObject(i)->intercepts(ray, dist)) {
+				if (dist < minDist) {
+					hitObj = scene->getObject(i);
+					minDist = dist; // update min distance 
+				}
 			}
 		}
 	}
+	//test if ray hits an object and store the closest hit point to start of ray
+	
+
 	//se nao interseta nenhum obj ent a cor é a do bg
 	if (!hitObj) { return scene->GetBackgroundColor(); }
 
 
 	else {
 		//computar a normal no hit point
-		Vector pHit = ray.origin + ray.direction * minDist;
+		if (Accel_Struct == NONE) {
+			pHit = ray.origin + ray.direction * minDist;
+		}
+		//pHit = ray.origin + ray.direction * minDist;
 		Vector nHit = hitObj->getNormal(pHit).normalize();
 
 		Color pixel_color = Color();
@@ -676,8 +691,9 @@ void renderScene()
 			//float focalDist = 1.5f;
 			float viewDist = camera->GetPlaneDist();
 
-			if (!nSample) nSample = 2;
+			if (!nSample) nSample = 1;
 
+			
 			/*for (int p = 0; p < nSample; p++) {
 				Vector ls = rnd_unit_disk() * camera->GetAperture();
 				Vector ps = Vector(x, y, -viewDist);
