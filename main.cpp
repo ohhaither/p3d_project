@@ -513,7 +513,7 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 		if (Accel_Struct == NONE) {
 			pHit = ray.origin + ray.direction * minDist;
 		}
-		//pHit = ray.origin + ray.direction * minDist;
+		
 		Vector nHit = hitObj->getNormal(pHit).normalize();
 
 		Color pixel_color = Color();
