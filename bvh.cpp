@@ -45,18 +45,6 @@ void BVH::Build(vector<Object *> &objs) {
 			build_recursive(0, objects.size(), root); // -> root node takes all the 
 		}
 
-bool compareX(Object* i1, Object* i2)
-{
-	return (i1->getCentroid().getAxisValue(0) < i2->getCentroid().getAxisValue(0));
-}
-bool compareY(Object* i1, Object* i2)
-{
-	return (i1->getCentroid().getAxisValue(1) < i2->getCentroid().getAxisValue(1));
-}
-bool compareZ(Object* i1, Object* i2)
-{
-	return (i1->getCentroid().getAxisValue(2) < i2->getCentroid().getAxisValue(2));
-}
 
 
 void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
@@ -97,15 +85,15 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 				longestRange = Vector(0, 0, zRange);
 			}
 		}
-		/*
+		
 		if (longestRange.y != 0) {
-			sort(objects.at(left_index), objects.at(right_index), compareY);
+			sort(objects.begin() + left_index, objects.begin() + right_index, BVH::Comparator());
 		}
 		if (longestRange.x != 0) {
-			sort(objects.at(left_index), objects.at(right_index), compareX);
+			sort(objects.begin() + left_index, objects.begin() + right_index, BVH::Comparator());
 		}
 		if (longestRange.z != 0) {
-			sort(objects.at(left_index), objects.at(right_index), compareZ);
+			sort(objects.begin() + left_index, objects.begin() + right_index, BVH::Comparator());
 		}
 		Vector center = b.centroid();
 		int split_index;
@@ -118,10 +106,9 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		else {
 			split_index = center.z;
 		}
-		*/
-		int split_index = 0;
-		node->makeNode(nodes.size());
-		node->makeNode(nodes.size()+1);
+		
+		//int split_index = 0;
+		
 
 		BVHNode* left = new BVHNode();
 		
@@ -140,6 +127,10 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		}
 		left->setAABB(bboxLeft);
 		right->setAABB(bboxRight);
+
+		node->makeNode(nodes.size()) ;
+		node->makeNode(nodes.size() + 1);
+
 		nodes.push_back(left);
 		nodes.push_back(right);
 
@@ -161,6 +152,21 @@ bool BVH::Traverse(Ray& ray, Object** hit_obj, Vector& hit_point) {
 
 			BVHNode* currentNode = nodes[0];
 
+			std::vector< pair<BVHNode*,float>> stack;
+			Object* closest_obj;
+
+			if (currentNode->getAABB().intercepts(ray, tmin)) {
+				if (nodes[currentNode->getIndex() + 1]->getAABB().intercepts(ray, tmin)) {
+					pair<BVHNode*, float> p;
+					p.first = nodes[currentNode->getIndex() + 2];
+					p.second = tmin;
+					stack.push_back(p);
+				}
+				if (nodes[currentNode->getIndex() + 2]->getAABB().intercepts(ray, tmin)) {
+
+				}
+			}
+			
 			//PUT YOUR CODE HERE
 			
 			return(false);

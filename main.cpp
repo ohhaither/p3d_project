@@ -491,7 +491,7 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 	if (Accel_Struct == GRID_ACC) {
 		grid_ptr->Traverse(ray,&hitObj,pHit);
 	}
-	if (Accel_Struct == NONE) {
+	else if (Accel_Struct == NONE) {
 		for (int i = 0; i < numObjects; i++) {
 			if (scene->getObject(i)->intercepts(ray, dist)) {
 				if (dist < minDist) {
@@ -589,8 +589,8 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 			lightArray[8] = Vector(luz->position.x - 0.05, luz->position.y + 0.05, luz->position.z);
 			// 
 			//with anti aliasing
-			Vector up = (luz->position + Vector(2, 0, 0)).normalize();
-			Vector right = (luz->position + Vector(0, 2, 0)).normalize();
+			Vector up = (luz->position + Vector(2.0, 0.0, 0.0)).normalize();
+			Vector right = (luz->position + Vector(0.0, 2.0, 0.0)).normalize();
 			float rndVal1 = rand_float();
 			float rndVal2 = rand_float();
 			Vector randomPlace = luz->position + up * rndVal1 + right * rndVal2;
@@ -627,16 +627,27 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 			*/
 			Vector L = (randomPlace - pHit).normalize();
 			//
-
+			/*
+			*/
 			Vector shadowpHit = pHit + nHit * EPSILON;
 			float shadowRayDist = INFINITY;
 			Ray shadowRay = Ray(shadowpHit, L);
-			//if  (!point in shadow); trace shadow ray
-			for (int i = 0; i < numObjects; i++) {
-				Object* obj = scene->getObject(i);
-				if (obj->intercepts(shadowRay, shadowRayDist)) {
+
+			if (Accel_Struct == NONE) {
+				
+				//if  (!point in shadow); trace shadow ray
+				for (int i = 0; i < numObjects; i++) {
+					Object* obj = scene->getObject(i);
+					if (obj->intercepts(shadowRay, shadowRayDist)) {
+						isShadow = true;
+						break;
+					}
+				}	
+			}
+
+			if (Accel_Struct == GRID_ACC) {
+				if (grid_ptr->Traverse(shadowRay)) {
 					isShadow = true;
-					break;
 				}
 			}
 
