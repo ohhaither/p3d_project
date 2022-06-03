@@ -54,6 +54,7 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 			node->makeLeaf(left_index, right_index - left_index);
 			return;
 		}
+		
 		AABB b = node->getAABB();
 		Vector min = b.min;
 		Vector max = b.max;
@@ -85,15 +86,19 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 				longestRange = Vector(0, 0, zRange);
 			}
 		}
+		Comparator a = Comparator();
 		
 		if (longestRange.y != 0) {
-			sort(objects.begin() + left_index, objects.begin() + right_index, BVH::Comparator());
+			a.dimension = 1;
+			sort(objects.begin() + left_index, objects.begin() + right_index, a);
 		}
 		if (longestRange.x != 0) {
-			sort(objects.begin() + left_index, objects.begin() + right_index, BVH::Comparator());
+			a.dimension = 0;
+			sort(objects.begin() + left_index, objects.begin() + right_index, a);
 		}
 		if (longestRange.z != 0) {
-			sort(objects.begin() + left_index, objects.begin() + right_index, BVH::Comparator());
+			a.dimension = 2;
+			sort(objects.begin() + left_index, objects.begin() + right_index, a);
 		}
 		Vector center = b.centroid();
 		int split_index;
@@ -129,7 +134,8 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		right->setAABB(bboxRight);
 
 		node->makeNode(nodes.size()) ;
-		node->makeNode(nodes.size() + 1);
+		//node->makeNode(nodes.size() + 1);
+		
 
 		nodes.push_back(left);
 		nodes.push_back(right);

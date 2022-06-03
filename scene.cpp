@@ -13,25 +13,34 @@ Triangle::Triangle(Vector& P0, Vector& P1, Vector& P2)
 	float l;
 
 	/* Calculate the normal */
-	normal = (P2 - P1) % (P0 - P1);
-	normal = normal.normalize();
+	normal = (P1 - P0) % (P2 - P0);  //cross product
+	normal.normalize();
 
-	//YOUR CODE to Calculate the Min and Max for bounding box
-	float aux_min, aux_max;
-	
-	aux_min = min(points[0].x, points[1].x);
-	aux_min = min(aux_min, points[2].x);
-
+	//Calculate the Min and Max for bounding box
 	Min = Vector(+FLT_MAX, +FLT_MAX, +FLT_MAX);
 	Max = Vector(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
-
+	for (auto& point : points) {
+		if (point.x < Min.x)
+			Min.x = point.x;
+		if (point.x > Max.x)
+			Max.x = point.x;
+		if (point.y < Min.y)
+			Min.y = point.y;
+		if (point.y > Max.y)
+			Max.y = point.y;
+		if (point.z < Min.z)
+			Min.z = point.z;
+		if (point.z > Max.z)
+			Max.z = point.z;
+	}
 	// enlarge the bounding box a bit just in case...
 	Min -= EPSILON;
 	Max += EPSILON;
 }
 
 AABB Triangle::GetBoundingBox() {
+
 	return(AABB(Min, Max));
 }
 
