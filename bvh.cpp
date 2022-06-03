@@ -72,40 +72,40 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		Vector longestRange = Vector();
 		if (xRange > yRange) {
 			if (xRange > zRange) {
-				longestRange = Vector(xRange,0,0);
+				longestRange = Vector(xRange,0.0,0.0);
 			}
 			else {
-				longestRange = Vector(0,0,zRange);
+				longestRange = Vector(0.0,0.0,zRange);
 			}
 		}
 		else {
 			if (yRange > zRange) {
-				longestRange = Vector(0,yRange,0);
+				longestRange = Vector(0.0,yRange,0.0);
 			}
 			else {
-				longestRange = Vector(0, 0, zRange);
+				longestRange = Vector(0.0, 0.0, zRange);
 			}
 		}
 		Comparator a = Comparator();
 		
-		if (longestRange.y != 0) {
+		if (longestRange.y != 0.0) {
 			a.dimension = 1;
 			sort(objects.begin() + left_index, objects.begin() + right_index, a);
 		}
-		if (longestRange.x != 0) {
+		if (longestRange.x != 0.0) {
 			a.dimension = 0;
 			sort(objects.begin() + left_index, objects.begin() + right_index, a);
 		}
-		if (longestRange.z != 0) {
+		if (longestRange.z != 0.0) {
 			a.dimension = 2;
 			sort(objects.begin() + left_index, objects.begin() + right_index, a);
 		}
 		Vector center = b.centroid();
 		int split_index;
-		if (longestRange.x != 0) {
+		if (longestRange.x != 0.0) {
 			split_index = center.x;
 		}
-		else if (longestRange.y != 0) {
+		else if (longestRange.y != 0.0) {
 			split_index = center.y;
 		}
 		else {
@@ -113,14 +113,15 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		}
 		
 		//int split_index = 0;
-		
+		int axis = a.dimension;
 
+		
 		BVHNode* left = new BVHNode();
 		
 		BVHNode* right = new BVHNode();
 
-		AABB bboxLeft = AABB();
-		AABB bboxRight = AABB();
+		AABB bboxLeft = AABB(min,max);
+		AABB bboxRight = AABB(min,max);
 		for (int i = left_index; i < split_index; i++) {
 			AABB bbox = objects.at(i)->GetBoundingBox();
 			bboxLeft.extend(bbox);
@@ -157,18 +158,47 @@ bool BVH::Traverse(Ray& ray, Object** hit_obj, Vector& hit_point) {
 			bool hit = false;
 
 			BVHNode* currentNode = nodes[0];
-
-			std::vector< pair<BVHNode*,float>> stack;
-			Object* closest_obj;
+			Object* closest_obj = NULL;
+			float closestDistance = FLT_MAX;
+			float distance;
 
 			if (currentNode->getAABB().intercepts(ray, tmin)) {
-				if (nodes[currentNode->getIndex() + 1]->getAABB().intercepts(ray, tmin)) {
-					pair<BVHNode*, float> p;
-					p.first = nodes[currentNode->getIndex() + 2];
-					p.second = tmin;
-					stack.push_back(p);
-				}
-				if (nodes[currentNode->getIndex() + 2]->getAABB().intercepts(ray, tmin)) {
+				while (true) {
+					if (!currentNode->isLeaf()) {
+						float t1;
+						float t2;
+						if (nodes[currentNode->getIndex()]->getAABB().intercepts(ray,t1) && nodes[currentNode->getIndex() + 1]->getAABB().intercepts(ray, t2)) {
+							if (t1 > t2) {
+								StackItem one = StackItem(nodes[currentNode->getIndex()], t1);
+								hit_stack.push(one);
+								currentNode = nodes[currentNode->getIndex() + 1];
+							}
+							else {
+								StackItem two = StackItem(nodes[currentNode->getIndex() + 1], t2);
+								hit_stack.push(two);
+								currentNode = nodes[currentNode->getIndex()];
+							}
+						}
+						else if (nodes[currentNode->getIndex() + 1]->getAABB().intercepts(ray, t1)) {
+							currentNode = nodes[currentNode->getIndex() + 1];
+						}
+					}
+					else {
+						int ind = currentNode->getNObjs();
+						int ind2 = currentNode->getIndex();
+						
+						for (int i = ind2; i < (ind2 + ind); i++) {
+							if (objects[i]->intercepts(ray, distance) && distance < closestDistance) {
+								closestDistance = distance;
+								hit_obj = &objects[i];
+								hit_point = ray.origin + ray.direction * closestDistance;
+							}
+						}
+					}
+
+					while (!hit_stack.empty()) {
+						hit_stack.pop();
+					}
 
 				}
 			}
