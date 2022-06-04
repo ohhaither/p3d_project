@@ -27,6 +27,8 @@
 //Enable OpenGL drawing.  
 bool drawModeEnabled = true;
 
+bool  firstFrame = true;
+
 bool P3F_scene = true; //choose between P3F scene or a built-in random scene
 
 #define MAX_DEPTH 4  //number of bounces
@@ -491,6 +493,9 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 	if (Accel_Struct == GRID_ACC) {
 		grid_ptr->Traverse(ray,&hitObj,pHit);
 	}
+	if (Accel_Struct ==	BVH_ACC) {
+		bvh_ptr->Traverse(ray, &hitObj, pHit);
+	}
 	else if (Accel_Struct == NONE) {
 		for (int i = 0; i < numObjects; i++) {
 			if (scene->getObject(i)->intercepts(ray, dist)) {
@@ -560,10 +565,18 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 			//offset intersections at the secondary rays
 			Vector newOrg = pHit + (nHit * EPSILON);
 			Vector newOrg2 = pHit - (nHit * EPSILON);
+			Vector reflectionDir = ray.direction - nHit * 2 * (ray.direction * nHit);
 
 			//calculate ray in the reflected direction
-			Vector reflectionDir = ray.direction - nHit * 2 * (ray.direction * nHit);
+			/* NORMAL REFLECTION
 			Ray rRay = Ray(newOrg, reflectionDir);
+			*/
+			float roughness_param = 0.4f;
+			Vector sphereCenter = newOrg + reflectionDir;
+			Vector newSphereCenter = sphereCenter + rnd_unit_sphere() * roughness_param;
+			Vector newReflectionDir = newSphereCenter - newOrg;
+
+			Ray rRay = Ray(newOrg, newReflectionDir);
 
 			Color rColor = rayTracing(rRay, depth + 1, ior_1) ;
 
@@ -679,7 +692,9 @@ void renderScene()
 {
 	int index_pos = 0;
 	int index_col = 0;
+	int index_col2 = 0;
 	unsigned int counter = 0;
+	unsigned int counter2 = 0;
 	float nSample = scene->GetSamplesPerPixel();
 
 	if (drawModeEnabled) {
@@ -744,22 +759,51 @@ void renderScene()
 
 			//color = scene->GetBackgroundColor(); //TO CHANGE - just for the template
 
-			img_Data[counter++] = u8fromfloat((float)color.r());
+			if (firstFrame) {
+				img_Data[counter++] = u8fromfloat((float)color.r());
+				img_Data[counter++] = u8fromfloat((float)color.g());
+				img_Data[counter++] = u8fromfloat((float)color.b());
+			}
+			else {
+				img_Data[counter++] = u8fromfloat((float)(color.r() + colors[counter2]) / 2.0f);
+				counter2++;
+				img_Data[counter++] = u8fromfloat((float)(color.g() + colors[counter2]) / 2.0f);
+				counter2++;
+				img_Data[counter++] = u8fromfloat((float)(color.b() + colors[counter2]) / 2.0f);
+				counter2++;
+
+			}
+			/*img_Data[counter++] = u8fromfloat((float)color.r());
 			img_Data[counter++] = u8fromfloat((float)color.g());
-			img_Data[counter++] = u8fromfloat((float)color.b());
+			img_Data[counter++] = u8fromfloat((float)color.b());*/
 
 			if (drawModeEnabled) {
 				vertices[index_pos++] = (float)x;
 				vertices[index_pos++] = (float)y;
-				colors[index_col++] = (float)color.r();
 
+				if (firstFrame) {
+					colors[index_col++] = (float)color.r();
+					colors[index_col++] = (float)color.g();
+					colors[index_col++] = (float)color.b();
+				}
+				else {
+					colors[index_col++] = (float)((color.r() + colors[index_col2]) / 2.0f);
+					index_col2++;
+					colors[index_col++] = (float)((color.g() + colors[index_col2]) / 2.0f);
+					index_col2++;
+					colors[index_col++] = (float)((color.b() + colors[index_col2]) / 2.0f);
+					index_col2++;
+
+				}
+
+				/*colors[index_col++] = (float)color.r();
 				colors[index_col++] = (float)color.g();
-
-				colors[index_col++] = (float)color.b();
+				colors[index_col++] = (float)color.b();*/
 			}
 		}
 
 	}
+	if (firstFrame) firstFrame = false;
 	if (drawModeEnabled) {
 		drawPoints();
 		glutSwapBuffers();

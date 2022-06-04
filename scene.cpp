@@ -153,22 +153,12 @@ bool Sphere::intercepts(Ray& r, float& t)
 {
 	//PUT HERE YOUR CODE
 	float t0, t1;
-#if 0
-	Vector l = center - r.origin;
-	float tca = l.operator*(r.direction);
-	if (tca < 0) return false;
-	float d2 = l.operator*(l) -(tca * tca);
-	if (d2 > SqRadius) return false;
-	float thc = sqrt(SqRadius - d2);
-	t0 = tca - thc;
-	t1 = tca + thc;
-#else 
+
 	Vector l = r.origin - center;
 	float a = r.direction * r.direction;
 	float b = 2 * (r.direction * l) ;
 	float c = l.operator*(l) -SqRadius;
 	if (!solveQuadratic(a, b, c, t0, t1)) return false;
-#endif
 	if (t0 > t1) std::swap(t0, t1);
 	if (t0 < 0) {
 		t0 = t1;
