@@ -55,10 +55,10 @@ Vector Triangle::getNormal(Vector point)
 
 bool Triangle::intercepts(Ray& r, float& t ) {
 	//PUT HERE YOUR CODE
-	Vector v0v1 = points[1] - points[0];
-	Vector v0v2 = points[2] - points[0];
-	Vector pvec = r.direction % v0v2;
-	float det = v0v1 * pvec;
+	Vector top = points[1] - points[0];
+	Vector left = points[2] - points[0];
+	Vector cross = r.direction % left;
+	float det = top * cross;
 	if (det < 0.0000001) {
 		return false;
 	}
@@ -66,17 +66,17 @@ bool Triangle::intercepts(Ray& r, float& t ) {
 		return false;
 	}
 	float invdet = 1 / det;
-	Vector tvec = r.origin - points[0];
-	float u = (tvec * pvec) * invdet;
+	Vector pointToOrigin = r.origin - points[0];
+	float u = (pointToOrigin * cross) * invdet;
 	if (u < 0 || u > 1) {
 		return false;
 	}
-	Vector qvec = tvec % v0v1;
-	float v = (r.direction * qvec) * invdet;
+	Vector cross2 = pointToOrigin % top;
+	float v = (r.direction * cross2) * invdet;
 	if (v < 0 || u + v > 1) {
 		return false;
 	}
-	t = (v0v2 * qvec) * invdet;
+	t = (left * cross2) * invdet;
 	//printf("did it\n");
 	return true;
 }

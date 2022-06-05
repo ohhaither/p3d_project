@@ -1,13 +1,2 @@
-﻿  bvh.cpp
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\maths.h(69,23): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\color.h(42,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\color.h(41,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\color.h(40,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\bvh.cpp(25,49): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\bvh.cpp(45,43): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\bvh.cpp(96,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\bvh.cpp(143,30): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\bvh.cpp(162,10): warning C4101: 'tmp': unreferenced local variable
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\bvh.cpp(263,8): warning C4101: 'tmp': unreferenced local variable
-  P3D_Template3.vcxproj -> C:\Users\tomax\source\repos\P3D_Template3\x64\Debug\P3D_Template3.exe
+﻿  P3D_Template3.vcxproj -> C:\Users\tomax\source\repos\P3D_Template3\x64\Debug\P3D_Template3.exe
   0 File(s) copied
