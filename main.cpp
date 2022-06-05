@@ -664,6 +664,12 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 				}
 			}
 
+			if (Accel_Struct == BVH_ACC) {
+				if (bvh_ptr->Traverse(shadowRay)) {
+					isShadow = true;
+				}
+			}
+
 			if (float intensity = (L * nHit) > 0) {
 				if (!isShadow) {
 					Vector H = ((L - ray.direction) / 2).normalize();

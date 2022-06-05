@@ -50,7 +50,7 @@ void BVH::Build(vector<Object *> &objs) {
 void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 	   //PUT YOUR CODE HERE
 
-		if (right_index - left_index <= 2) {
+		if (right_index - left_index <= Threshold) {
 			node->makeLeaf(left_index, right_index - left_index);
 			return;
 		}
@@ -69,47 +69,53 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		float yRange = y1 - y0;
 		float zRange = z1 - z0;
 
-		Vector longestRange = Vector();
+		int dim;
+
+		
 		if (xRange > yRange) {
 			if (xRange > zRange) {
-				longestRange = Vector(xRange,0.0,0.0);
+				dim = 0;
 			}
-			else {
-				longestRange = Vector(0.0,0.0,zRange);
+			else {	
+				dim = 2;
 			}
 		}
 		else {
 			if (yRange > zRange) {
-				longestRange = Vector(0.0,yRange,0.0);
+				dim = 1;
 			}
 			else {
-				longestRange = Vector(0.0, 0.0, zRange);
+				dim = 2;
 			}
 		}
 		Comparator a = Comparator();
+		a.dimension = dim;
+		sort(objects.begin() + left_index, objects.begin() + right_index, a);
+
+
+		float middle = (b.max.getAxisValue(dim) + b.min.getAxisValue(dim)) * 0.5;
 		
-		if (longestRange.y != 0.0) {
-			a.dimension = 1;
-			sort(objects.begin() + left_index, objects.begin() + right_index, a);
-		}
-		if (longestRange.x != 0.0) {
-			a.dimension = 0;
-			sort(objects.begin() + left_index, objects.begin() + right_index, a);
-		}
-		if (longestRange.z != 0.0) {
-			a.dimension = 2;
-			sort(objects.begin() + left_index, objects.begin() + right_index, a);
-		}
-		Vector center = b.centroid();
 		int split_index;
-		if (longestRange.x != 0.0) {
-			split_index = center.x;
+
+		//certificar que nenhum ramo fica vazio
+		if (objects[left_index]->getCentroid().getAxisValue(dim) > middle || objects[right_index - 1]->getCentroid().getAxisValue(dim) <= middle) {
+			middle = 0;
+			for (split_index = left_index; split_index < right_index; split_index++) {
+				middle += objects[split_index]->getCentroid().getAxisValue(dim);
+			}
+			middle /= (right_index - left_index);
 		}
-		else if (longestRange.y != 0.0) {
-			split_index = center.y;
+
+		if (objects[left_index]->getCentroid().getAxisValue(dim) > middle || objects[right_index - 1]->getCentroid().getAxisValue(dim) <= middle) {
+
+			split_index = left_index + Threshold;
 		}
 		else {
-			split_index = center.z;
+			for (split_index = left_index; split_index < right_index; split_index++) {
+				if (objects[split_index]->getCentroid().getAxisValue(dim) > middle) {
+					break;
+				}
+			}
 		}
 		
 		//int split_index = 0;
@@ -123,12 +129,12 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		AABB bboxLeft = AABB(min,max);
 		AABB bboxRight = AABB(min,max);
 		for (int i = left_index; i < split_index; i++) {
-			AABB bbox = objects.at(i)->GetBoundingBox();
+			AABB bbox = objects[i]->GetBoundingBox();
 			bboxLeft.extend(bbox);
 
 		}
 		for (int i = split_index; i < right_index; i++) {
-			AABB bbox = objects.at(i)->GetBoundingBox();
+			AABB bbox = objects[i]->GetBoundingBox();
 			bboxRight.extend(bbox);
 		}
 		left->setAABB(bboxLeft);
@@ -159,45 +165,90 @@ bool BVH::Traverse(Ray& ray, Object** hit_obj, Vector& hit_point) {
 
 			BVHNode* currentNode = nodes[0];
 			Object* closest_obj = NULL;
-			float closestDistance = FLT_MAX;
 			float distance;
 
-			if (currentNode->getAABB().intercepts(ray, tmin)) {
+			if (currentNode->getAABB().intercepts(ray, distance)) {
 				while (true) {
 					if (!currentNode->isLeaf()) {
 						float t1;
 						float t2;
-						if (nodes[currentNode->getIndex()]->getAABB().intercepts(ray,t1) && nodes[currentNode->getIndex() + 1]->getAABB().intercepts(ray, t2)) {
+
+						BVHNode* left = nodes[currentNode->getIndex()];
+						BVHNode* right = nodes[currentNode->getIndex()+1];
+
+						//faco ja isto assim em vez de estar constantemente a chamar as funcoes nos ifs que nao deve haver problema
+						bool leftH = left->getAABB().intercepts(ray, t1);
+						bool rightH = right->getAABB().intercepts(ray, t2);
+
+						
+
+						//acho q isto e necessario pelo q vi no horario de duvidas?
+						if (left->getAABB().isInside(ray.origin)) {
+							t1 = 0;
+						} 
+						if (right->getAABB().isInside(ray.origin)) {
+							t2 = 0;
+						} 
+
+						if (leftH && rightH) {
 							if (t1 > t2) {
-								StackItem one = StackItem(nodes[currentNode->getIndex()], t1);
+								StackItem one = StackItem(left, t1);
 								hit_stack.push(one);
-								currentNode = nodes[currentNode->getIndex() + 1];
+								currentNode = right;
 							}
 							else {
-								StackItem two = StackItem(nodes[currentNode->getIndex() + 1], t2);
+								StackItem two = StackItem(right, t2);
 								hit_stack.push(two);
-								currentNode = nodes[currentNode->getIndex()];
+								currentNode = left;
 							}
+							continue;
 						}
-						else if (nodes[currentNode->getIndex() + 1]->getAABB().intercepts(ray, t1)) {
-							currentNode = nodes[currentNode->getIndex() + 1];
+						else if (leftH) {
+							currentNode = left;
+							continue;
+						}
+						else if (rightH) {
+							currentNode = right;
+							continue;
 						}
 					}
 					else {
 						int ind = currentNode->getNObjs();
 						int ind2 = currentNode->getIndex();
+						float temp;
 						
 						for (int i = ind2; i < (ind2 + ind); i++) {
-							if (objects[i]->intercepts(ray, distance) && distance < closestDistance) {
-								closestDistance = distance;
-								hit_obj = &objects[i];
-								hit_point = ray.origin + ray.direction * closestDistance;
+							if (objects[i]->intercepts(ray, temp) && temp < tmin) {
+								tmin = temp;
+								*hit_obj = objects[i];
+								hit = true;
 							}
 						}
 					}
 
+					bool newT = false;
+
 					while (!hit_stack.empty()) {
+						StackItem head = hit_stack.top();
 						hit_stack.pop();
+
+						if (head.t < tmin) {
+							currentNode = head.ptr;
+							newT = true;
+							break;
+						}
+					}
+					
+					//tem que ser assim porque o continue faz com q eu trabalhe apenas no nested while
+					if (newT) {
+						continue;
+					}
+
+					if (hit_stack.empty()) {
+						if (hit) {
+							hit_point = ray.direction * tmin + ray.origin;
+						}
+						return hit;
 					}
 
 				}
@@ -209,12 +260,97 @@ bool BVH::Traverse(Ray& ray, Object** hit_obj, Vector& hit_point) {
 	}
 
 bool BVH::Traverse(Ray& ray) {  //shadow ray with length
-			float tmp;
+	float tmp;
+	float tmin = FLT_MAX;  //contains the closest primitive intersection
+	bool hit = false;
 
-			double length = ray.direction.length(); //distance between light and intersection point
-			ray.direction.normalize();
+	BVHNode* currentNode = nodes[0];
+	Object* closest_obj = NULL;
+	float distance;
 
-			//PUT YOUR CODE HERE
+	if (currentNode->getAABB().intercepts(ray, distance)) {
+		while (true) {
+			if (!currentNode->isLeaf()) {
+				float t1;
+				float t2;
 
-			return(false);
+				BVHNode* left = nodes[currentNode->getIndex()];
+				BVHNode* right = nodes[currentNode->getIndex() + 1];
+
+				//faco ja isto assim em vez de estar constantemente a chamar as funcoes nos ifs que nao deve haver problema
+				bool leftH = left->getAABB().intercepts(ray, t1);
+				bool rightH = right->getAABB().intercepts(ray, t2);
+
+
+
+				//acho q isto e necessario pelo q vi no horario de duvidas?
+				if (left->getAABB().isInside(ray.origin)) {
+					t1 = 0;
+				}
+				if (right->getAABB().isInside(ray.origin)) {
+					t2 = 0;
+				}
+
+				if (leftH && rightH) {
+					if (t1 > t2) {
+						StackItem one = StackItem(left, t1);
+						hit_stack.push(one);
+						currentNode = right;
+					}
+					else {
+						StackItem two = StackItem(right, t2);
+						hit_stack.push(two);
+						currentNode = left;
+					}
+					continue;
+				}
+				else if (leftH) {
+					currentNode = left;
+					continue;
+				}
+				else if (rightH) {
+					currentNode = right;
+					continue;
+				}
+			}
+			else {
+				int ind = currentNode->getNObjs();
+				int ind2 = currentNode->getIndex();
+				float temp;
+
+				for (int i = ind2; i < (ind2 + ind); i++) {
+					if (objects[i]->intercepts(ray, temp) && temp < tmin) {
+						return true;
+					}
+				}
+			}
+
+			bool newT = false;
+
+			while (!hit_stack.empty()) {
+				StackItem head = hit_stack.top();
+				hit_stack.pop();
+
+				if (head.t < tmin) {
+					currentNode = head.ptr;
+					newT = true;
+					break;
+				}
+			}
+
+			//tem que ser assim porque o continue faz com q eu trabalhe apenas no nested while
+			if (newT) {
+				continue;
+			}
+
+			if (hit_stack.empty()) {
+				return false;
+			}
+
+		}
+	}
+
+	//PUT YOUR CODE HERE
+
+	return(false);
 	}		
