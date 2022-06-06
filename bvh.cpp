@@ -109,7 +109,6 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		}
 
 		if (objects[left_index]->getCentroid().getAxisValue(dim) > middle || objects[right_index - 1]->getCentroid().getAxisValue(dim) <= middle) {
-
 			split_index = left_index + Threshold;
 		}
 		else {
@@ -121,7 +120,6 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		}
 		
 		//int split_index = 0;
-		int axis = a.dimension;
 
 		
 		BVHNode* left = new BVHNode();
@@ -181,9 +179,6 @@ bool BVH::Traverse(Ray& ray, Object** hit_obj, Vector& hit_point) {
 						//faco ja isto assim em vez de estar constantemente a chamar as funcoes nos ifs que nao deve haver problema
 						bool leftH = left->getAABB().intercepts(ray, t1);
 						bool rightH = right->getAABB().intercepts(ray, t2);
-
-						
-
 						//acho q isto e necessario pelo q vi no horario de duvidas?
 						if (left->getAABB().isInside(ray.origin)) {
 							t1 = 0;
@@ -227,9 +222,7 @@ bool BVH::Traverse(Ray& ray, Object** hit_obj, Vector& hit_point) {
 							}
 						}
 					}
-
 					bool newT = false;
-
 					while (!hit_stack.empty()) {
 						StackItem head = hit_stack.top();
 						hit_stack.pop();
@@ -240,12 +233,10 @@ bool BVH::Traverse(Ray& ray, Object** hit_obj, Vector& hit_point) {
 							break;
 						}
 					}
-					
 					//tem que ser assim porque o continue faz com q eu trabalhe apenas no nested while
 					if (newT) {
 						continue;
 					}
-
 					if (hit_stack.empty()) {
 						if (hit) {
 							hit_point = ray.direction * tmin + ray.origin;
@@ -282,9 +273,6 @@ bool BVH::Traverse(Ray& ray) {  //shadow ray with length
 				//faco ja isto assim em vez de estar constantemente a chamar as funcoes nos ifs que nao deve haver problema
 				bool leftH = left->getAABB().intercepts(ray, t1);
 				bool rightH = right->getAABB().intercepts(ray, t2);
-
-
-
 				//acho q isto e necessario pelo q vi no horario de duvidas?
 				if (left->getAABB().isInside(ray.origin)) {
 					t1 = 0;
@@ -292,7 +280,6 @@ bool BVH::Traverse(Ray& ray) {  //shadow ray with length
 				if (right->getAABB().isInside(ray.origin)) {
 					t2 = 0;
 				}
-
 				if (leftH && rightH) {
 					if (t1 > t2) {
 						StackItem one = StackItem(left, t1);
@@ -326,9 +313,7 @@ bool BVH::Traverse(Ray& ray) {  //shadow ray with length
 					}
 				}
 			}
-
 			bool newT = false;
-
 			while (!hit_stack.empty()) {
 				StackItem head = hit_stack.top();
 				hit_stack.pop();
@@ -339,12 +324,10 @@ bool BVH::Traverse(Ray& ray) {  //shadow ray with length
 					break;
 				}
 			}
-
 			//tem que ser assim porque o continue faz com q eu trabalhe apenas no nested while
 			if (newT) {
 				continue;
 			}
-
 			if (hit_stack.empty()) {
 				return false;
 			}

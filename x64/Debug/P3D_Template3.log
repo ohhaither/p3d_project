@@ -4,18 +4,18 @@ C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\color.h(42,14): warning 
 C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\color.h(41,14): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\color.h(40,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(484,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(593,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(594,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(596,60): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(597,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(597,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(598,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(598,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(600,60): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(601,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(601,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(602,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(602,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(704,16): warning C4244: 'initializing': conversion from 'unsigned int' to 'float', possible loss of data
-  P3D_Template3.vcxproj -> C:\Users\tomax\source\repos\P3D_Template3\x64\Debug\P3D_Template3.exe
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(595,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(596,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(598,60): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(599,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(599,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(600,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(600,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(602,60): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(603,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(603,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(604,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(604,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\main.cpp(757,16): warning C4244: 'initializing': conversion from 'unsigned int' to 'float', possible loss of data
+  P3D_Template3.vcxproj -> C:\Users\tomax\source\repos\P3D_Template3\P3D_Template3\x64\Debug\P3D_Template3.exe
   0 File(s) copied

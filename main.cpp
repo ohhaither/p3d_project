@@ -31,7 +31,7 @@ bool  firstFrame = true;
 
 bool P3F_scene = true; //choose between P3F scene or a built-in random scene
 
-#define MAX_DEPTH 4  //number of bounces
+#define MAX_DEPTH 6  //number of bounces
 
 #define CAPTION "Whitted Ray-Tracer"
 #define VERTEX_COORD_ATTRIB 0
@@ -568,16 +568,19 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 			Vector reflectionDir = ray.direction - nHit * 2 * (ray.direction * nHit);
 
 			//calculate ray in the reflected direction
+			//NORMAL REFLECTION
 			/* NORMAL REFLECTION
 			Ray rRay = Ray(newOrg, reflectionDir);
 			*/
+			//END NORMAL REFLECTION
+
+			//FUZZY REFLECTION
 			float roughness_param = 0.4f;
 			Vector sphereCenter = newOrg + reflectionDir;
 			Vector newSphereCenter = sphereCenter + rnd_unit_sphere() * roughness_param;
 			Vector newReflectionDir = newSphereCenter - newOrg;
-
 			Ray rRay = Ray(newOrg, newReflectionDir);
-
+			//END FUZZY REFLECTION
 			Color rColor = rayTracing(rRay, depth + 1, ior_1) ;
 
 			pixel_color += (rColor * hitObj->GetMaterial()->GetSpecular()*hitObj->GetMaterial()->GetSpecColor());
@@ -607,6 +610,9 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 			float rndVal1 = rand_float();
 			float rndVal2 = rand_float();
 			Vector randomPlace = luz->position + up * rndVal1 + right * rndVal2;
+
+
+			//SOFT SHADOWS WITHOUT ANTI ALIASING
 			/*
 			for (int k = 0; k < 9; k++) {
 				Vector L = (lightArray[k] - pHit).normalize();
@@ -638,10 +644,11 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 				}
 			}
 			*/
+			// END SOFT SHADOWS WITHOUT ANTI ALIASING
+	
+			// SOFT SHADOWS WITH ANTI ALIASING
+			
 			Vector L = (randomPlace - pHit).normalize();
-			//
-			/*
-			*/
 			Vector shadowpHit = pHit + nHit * EPSILON;
 			float shadowRayDist = INFINITY;
 			Ray shadowRay = Ray(shadowpHit, L);
@@ -682,8 +689,59 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 
 				}
 			}
+			
+			//END SOFT SHADOWS WITH ANTI ALIASING
+
+			//NORMAL SHADOWS
+			/*
+			Vector L = (luz->position - pHit).normalize();
+
+			Vector shadowpHit = pHit + nHit * EPSILON;
+			float shadowRayDist = INFINITY;
+			Ray shadowRay = Ray(shadowpHit, L);
+
+
+			if (Accel_Struct == NONE) {
+
+				//if  (!point in shadow); trace shadow ray
+				for (int i = 0; i < numObjects; i++) {
+					Object* obj = scene->getObject(i);
+					if (obj->intercepts(shadowRay, shadowRayDist)) {
+						isShadow = true;
+						break;
+					}
+				}
+			}
+
+			if (Accel_Struct == GRID_ACC) {
+				if (grid_ptr->Traverse(shadowRay)) {
+					isShadow = true;
+				}
+			}
+
+			if (Accel_Struct == BVH_ACC) {
+				if (bvh_ptr->Traverse(shadowRay)) {
+					isShadow = true;
+				}
+			}
+
+			if (float intensity = L * nHit > 0) {
+				if (!isShadow) {
+					Vector H = ((L - ray.direction) / 2).normalize();
+
+					Color diff = luz->color * hitObj->GetMaterial()->GetDiffColor() * hitObj->GetMaterial()->GetDiffuse() * max(0.0f, nHit * L);
+					Color spec = luz->color * hitObj->GetMaterial()->GetSpecColor() * hitObj->GetMaterial()->GetSpecular() * pow(max(0.0f, H * nHit), hitObj->GetMaterial()->GetShine());
+
+					pixel_color += (diff + spec);
+					//pixel_color = pixel_color.clamp();
+
+				}
+			}
+			*/
+			//END NORMAL SHADOWS
 
 		}
+
 		
 
 		return pixel_color;
@@ -737,6 +795,8 @@ void renderScene()
 			color = color * (1.0f / nSample);*/
 			
 
+			//ANTI ALIASING WITH DEPTH OF FIELD RENDER
+			/**/
 			for (int p = 0; p < nSample; p++) 
 				for (int q = 0; q < nSample; q++) {
 					Vector ls = rnd_unit_disk() * camera->GetAperture();
@@ -754,13 +814,18 @@ void renderScene()
 				}
 
 			color = color * (1 / (nSample * nSample));
+			
+			//END ANTI ALIASING WITH DEPTH OF FIELD RENDER
 
+
+			//NORMAL RENDER
 			/* NORMAL
 			pixel.x = x + 0.5f;
 			pixel.y = y + 0.5f;
 			Ray ray = scene->GetCamera()->PrimaryRay(pixel);
 			color = rayTracing(ray, 1, 1.0).clamp();
 			*/
+			//END NORMAL RENDER
 			
 
 			//color = scene->GetBackgroundColor(); //TO CHANGE - just for the template
