@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\tomax\source\repos\P3D_Template3\x64\Debug\P3D_Template3.exe</FullPath>
+      <FullPath>\\wsl$\Manjaro\home\soykrom\IST\Ano4\P3D\p3d_project\x64\Debug\P3D_Template3.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

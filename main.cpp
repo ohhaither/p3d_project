@@ -31,7 +31,7 @@ bool  firstFrame = true;
 
 bool P3F_scene = true; //choose between P3F scene or a built-in random scene
 
-#define MAX_DEPTH 4  //number of bounces
+#define MAX_DEPTH 3  //number of bounces
 
 #define CAPTION "Whitted Ray-Tracer"
 #define VERTEX_COORD_ATTRIB 0
@@ -480,7 +480,6 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 
 	
 
-	int maxDepth = 3;
 	Vector I = ray.direction.operator*((-1, -1, -1));
 	float minDist = INFINITY;
 	Object* hitObj = NULL;
@@ -491,7 +490,7 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 
 
 	if (Accel_Struct == GRID_ACC) {
-		grid_ptr->Traverse(ray,&hitObj,pHit);
+		grid_ptr->Traverse(ray, &hitObj, pHit);
 	}
 	if (Accel_Struct ==	BVH_ACC) {
 		bvh_ptr->Traverse(ray, &hitObj, pHit);
@@ -536,7 +535,7 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 		
 
 		//if reflective object
-		if (hitObj->GetMaterial()->GetTransmittance() > 0 && depth < maxDepth) {
+		if (hitObj->GetMaterial()->GetTransmittance() > 0 && depth < MAX_DEPTH) {
 			//offset intersections at the secondary rays
 			Vector newOrg = pHit + (nHit * EPSILON);
 			Vector newOrg2 = pHit - (nHit * EPSILON);
@@ -554,14 +553,16 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 			float eta = (inside) ? hitObj->GetMaterial()->GetRefrIndex() : 1 / hitObj->GetMaterial()->GetRefrIndex(); // are we inside or outside the surface?
 			float cosi = nHit * ray.direction * -1;
 			float k = 1 - eta * eta * (1 - cosi * cosi);
+
+
 			Vector refractionDir = ray.direction * eta + nHit * (eta * cosi - sqrt(k));
 			refractionDir = refractionDir.normalize();
 			Ray tRay = Ray(newOrg2, refractionDir);
 			Color tColor = rayTracing(tRay, depth + 1, ior_1);
 			//reduce rColor by the specular reflection coefficient and add to color???
-			pixel_color += (rColor * fresneleffect * hitObj->GetMaterial()->GetSpecColor()) + (tColor * (1 - fresneleffect));
+			pixel_color += (rColor * fresneleffect * hitObj->GetMaterial()->GetSpecColor()) + (tColor * (1 - fresneleffect) * hitObj->GetMaterial()->GetSpecColor());
 
-		}else if (hitObj->GetMaterial()->GetReflection() > 0 && depth < maxDepth) {
+		}else if (hitObj->GetMaterial()->GetReflection() > 0 && depth < MAX_DEPTH) {
 			//offset intersections at the secondary rays
 			Vector newOrg = pHit + (nHit * EPSILON);
 			Vector newOrg2 = pHit - (nHit * EPSILON);
@@ -606,9 +607,9 @@ Color rayTracing(Ray ray, int depth, float ior_1)  //index of refraction of medi
 			Vector right = (luz->position + Vector(0.0, 2.0, 0.0)).normalize();
 			float rndVal1 = rand_float();
 			float rndVal2 = rand_float();
+			
 			Vector randomPlace = luz->position + up * rndVal1 + right * rndVal2;
-			/*
-			for (int k = 0; k < 9; k++) {
+			/*for (int k = 0; k < 9; k++) {
 				Vector L = (lightArray[k] - pHit).normalize();
 				//
 
@@ -734,7 +735,7 @@ void renderScene()
 				color += rayTracing(ray, 1, 1.0).clamp();
 
 			}
-			color = color * (1.0f / nSample);*/
+			color = color * (1.0f / nSample);
 			
 
 			for (int p = 0; p < nSample; p++) 
@@ -754,17 +755,17 @@ void renderScene()
 				}
 
 			color = color * (1 / (nSample * nSample));
+			*/
 
-			/* NORMAL
+			/* NORMAL*/
 			pixel.x = x + 0.5f;
 			pixel.y = y + 0.5f;
 			Ray ray = scene->GetCamera()->PrimaryRay(pixel);
 			color = rayTracing(ray, 1, 1.0).clamp();
-			*/
 			
 
 			//color = scene->GetBackgroundColor(); //TO CHANGE - just for the template
-
+			/*
 			if (firstFrame) {
 				img_Data[counter++] = u8fromfloat((float)color.r());
 				img_Data[counter++] = u8fromfloat((float)color.g());
@@ -801,7 +802,7 @@ void renderScene()
 					index_col2++;
 
 				}
-
+				
 				/*colors[index_col++] = (float)color.r();
 				colors[index_col++] = (float)color.g();
 				colors[index_col++] = (float)color.b();*/

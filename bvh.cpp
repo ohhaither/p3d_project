@@ -48,8 +48,6 @@ void BVH::Build(vector<Object *> &objs) {
 
 
 void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
-	   //PUT YOUR CODE HERE
-
 		if (right_index - left_index <= Threshold) {
 			node->makeLeaf(left_index, right_index - left_index);
 			return;
@@ -254,7 +252,6 @@ bool BVH::Traverse(Ray& ray, Object** hit_obj, Vector& hit_point) {
 				}
 			}
 			
-			//PUT YOUR CODE HERE
 			
 			return(false);
 	}
