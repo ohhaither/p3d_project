@@ -48,6 +48,8 @@ void BVH::Build(vector<Object *> &objs) {
 
 
 void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
+	   //PUT YOUR CODE HERE
+
 		if (right_index - left_index <= Threshold) {
 			node->makeLeaf(left_index, right_index - left_index);
 			return;
@@ -62,6 +64,8 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		float x1 = max.getAxisValue(0);
 		float y1 = max.getAxisValue(1);
 		float z1 = max.getAxisValue(2);
+
+		Vector minBB = Vector(FLT_MAX, FLT_MAX, FLT_MAX), maxBB = Vector(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
 		float xRange = x1 - x0;
 		float yRange = y1 - y0;
@@ -86,7 +90,7 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 				dim = 2;
 			}
 		}
-		Comparator a = Comparator();
+		Comparator a;
 		a.dimension = dim;
 		sort(objects.begin() + left_index, objects.begin() + right_index, a);
 
@@ -124,8 +128,8 @@ void BVH::build_recursive(int left_index, int right_index, BVHNode *node) {
 		
 		BVHNode* right = new BVHNode();
 
-		AABB bboxLeft = AABB(min,max);
-		AABB bboxRight = AABB(min,max);
+		AABB bboxLeft = AABB(minBB,maxBB);
+		AABB bboxRight = AABB(minBB,maxBB);
 		for (int i = left_index; i < split_index; i++) {
 			AABB bbox = objects[i]->GetBoundingBox();
 			bboxLeft.extend(bbox);
@@ -252,6 +256,7 @@ bool BVH::Traverse(Ray& ray, Object** hit_obj, Vector& hit_point) {
 				}
 			}
 			
+			//PUT YOUR CODE HERE
 			
 			return(false);
 	}
